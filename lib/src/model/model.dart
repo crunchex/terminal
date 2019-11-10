@@ -1,6 +1,5 @@
 library terminal.src.model.model;
 
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:quiver/core.dart';

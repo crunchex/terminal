@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:async';
 import 'dart:typed_data';
 import 'package:terminal/terminal.dart';
 import 'package:terminal/theme.dart';
