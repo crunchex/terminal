@@ -27,7 +27,7 @@ class Glyph {
     bgColor = attr.bgColor;
   }
 
-  operator ==(Glyph other) {
+  operator ==(other) {
     return (value == other.value
             && bright == other.bright
             && dim == other.dim
