@@ -70,7 +70,7 @@ class EscapeHandler {
   };
 
   static String printEsc(List<int> escape) {
-    return '<ESC>' + UTF8.decode(escape.sublist(1));
+    return '<ESC>' + base64Encode(escape.sublist(1));
   }
 
   static bool handleEscape(List<int> escape, StreamController<List<int>> stdin, Model model, DisplayAttributes currAttributes) {
@@ -193,8 +193,8 @@ class EscapeHandler {
 
   static void _scrollScreen(List<int> escape, Model model) {
     int indexOfSemi = escape.indexOf(59);
-    int start = int.parse(UTF8.decode(escape.sublist(2, indexOfSemi))) - 1;
-    int end = int.parse(UTF8.decode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
+    int start = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
+    int end = int.parse(base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
     //print('Scrolling: $start to $end');
     model.scrollScreen(start, end);
   }
@@ -213,8 +213,8 @@ class EscapeHandler {
       col = 0;
     } else {
       int indexOfSemi = escape.indexOf(59);
-      row = int.parse(UTF8.decode(escape.sublist(2, indexOfSemi))) - 1;
-      col = int.parse(UTF8.decode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
+      row = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
+      col = int.parse(base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
     }
 
     model.cursorHome(row, col);
@@ -225,7 +225,7 @@ class EscapeHandler {
       model.cursorUp();
     } else {
       escape = escape.sublist(2, escape.length - 1);
-      model.cursorUp(int.parse(UTF8.decode(escape)));
+      model.cursorUp(int.parse(base64Encode(escape)));
     }
   }
 
@@ -234,7 +234,7 @@ class EscapeHandler {
       model.cursorDown();
     } else {
       escape = escape.sublist(2, escape.length - 1);
-      model.cursorDown(int.parse(UTF8.decode(escape)));
+      model.cursorDown(int.parse(base64Encode(escape)));
     }
   }
 
@@ -243,7 +243,7 @@ class EscapeHandler {
       model.cursorForward();
     } else {
       escape = escape.sublist(2, escape.length - 1);
-      model.cursorForward(int.parse(UTF8.decode(escape)));
+      model.cursorForward(int.parse(base64Encode(escape)));
     }
   }
 
@@ -252,14 +252,14 @@ class EscapeHandler {
         model.cursorBackward();
       } else {
         escape = escape.sublist(2, escape.length - 1);
-        model.cursorBackward(int.parse(UTF8.decode(escape)));
+        model.cursorBackward(int.parse(base64Encode(escape)));
       }
     }
 
   /// Sets multiple display attribute settings.
   /// Sets local [DisplayAttributes], given [escape].
   static void _setAttributeMode(List<int> escape, DisplayAttributes attr) {
-    String decodedEsc = UTF8.decode(escape);
+    String decodedEsc = base64Encode(escape);
 
     if (decodedEsc.contains('0m')) {
       attr.resetAll();
