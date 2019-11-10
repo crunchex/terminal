@@ -1,4 +1,4 @@
-part of model;
+part of terminal.src.model.model;
 
 /// The data model class for an individual glyph within [Model].
 class Glyph {

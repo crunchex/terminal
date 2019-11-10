@@ -1,4 +1,4 @@
-part of input;
+part of terminal.src.input.input;
 
 // Remapping of Dart keyCodes (whatever they really are)
 // to UTF8 integers of their Non-Shift equivalents.

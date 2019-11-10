@@ -1,4 +1,4 @@
-part of output;
+part of terminal.src.output.output;
 
 class EscapeHandler {
   // Taken from: http://www.termsys.demon.co.uk/vtansi.htm
