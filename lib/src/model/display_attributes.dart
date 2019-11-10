@@ -20,7 +20,7 @@ class DisplayAttributes {
       'fgColor': fgColor,
       'bgColor': bgColor
     };
-    return JSON.encode(properties);
+    return jsonEncode(properties);
   }
 
   void resetAll() {
