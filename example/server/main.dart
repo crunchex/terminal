@@ -14,7 +14,7 @@ WebSocket websocket;
 void initServer() {
   // Set up an HTTP webserver and listen for standard page requests or upgraded
   // [WebSocket] requests.
-  HttpServer.bind(InternetAddress.ANY_IP_V4, 8080).then((HttpServer server) {
+  HttpServer.bind(InternetAddress.anyIPv4, 8080).then((HttpServer server) {
     print("HttpServer listening on port:${server.port}...");
     server.asBroadcastStream()
     .listen((HttpRequest request) => routeRequest(request))
