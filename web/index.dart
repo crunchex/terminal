@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:async';
 import 'dart:typed_data';
 import 'package:terminal/terminal.dart';
 import 'package:terminal/theme.dart';
@@ -11,6 +10,7 @@ SpanElement status;
 Terminal term;
 
 void main() {
+  print('Terminal started');
   address = querySelector('#address');
   connect = querySelector('#connect');
   invert = querySelector('#invert');
@@ -54,6 +54,8 @@ void updateStatusDisconnect(Event e) {
 
 void restartWebsocket() {
   if (address.value == '') return;
+
+  print(address.value);
 
   if (ws != null && ws.readyState == WebSocket.OPEN) ws.close();
   initWebSocket('ws://${address.value}/pty');

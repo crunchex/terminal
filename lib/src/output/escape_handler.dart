@@ -1,50 +1,50 @@
-part of output;
+part of terminal.src.output.output;
 
 class EscapeHandler {
   // Taken from: http://www.termsys.demon.co.uk/vtansi.htm
   // And for VT102: http://www.ibiblio.org/pub/historic-linux/ftp-archives/tsx-11.mit.edu/Oct-07-1996/info/vt102.codes
   static Map constantEscapes = {
     // Device Status
-    JSON.encode([27, 91, 99]): 'Query Device Code',
-    JSON.encode([27, 91, 48, 99]): 'Query Device Code',
-    JSON.encode([27, 90]): 'Query Device Code',
-    JSON.encode([27, 91, 53, 110]): 'Query Device Status',
-    JSON.encode([27, 91, 54, 110]): 'Query Cursor Position',
+    jsonEncode([27, 91, 99]): 'Query Device Code',
+    jsonEncode([27, 91, 48, 99]): 'Query Device Code',
+    jsonEncode([27, 90]): 'Query Device Code',
+    jsonEncode([27, 91, 53, 110]): 'Query Device Status',
+    jsonEncode([27, 91, 54, 110]): 'Query Cursor Position',
     // Terminal Setup
-    JSON.encode([27, 99]): 'Reset Device',
-    JSON.encode([27, 55, 104]): 'Enable Line Wrap',
-    JSON.encode([27, 55, 108]): 'Disable Line Wrap',
+    jsonEncode([27, 99]): 'Reset Device',
+    jsonEncode([27, 55, 104]): 'Enable Line Wrap',
+    jsonEncode([27, 55, 108]): 'Disable Line Wrap',
     // Fonts
-    JSON.encode([27, 40]): 'Font Set G0',
-    JSON.encode([27, 41]): 'Font Set G1',
+    jsonEncode([27, 40]): 'Font Set G0',
+    jsonEncode([27, 41]): 'Font Set G1',
     // Cursor Control
-    JSON.encode([27, 91, 115]): 'Save Cursor',
-    JSON.encode([27, 91, 117]): 'Unsave Cursor',
-    JSON.encode([27, 55]): 'Save Cursor & Attrs',
-    JSON.encode([27, 56]): 'Restore Cursor & Attrs',
+    jsonEncode([27, 91, 115]): 'Save Cursor',
+    jsonEncode([27, 91, 117]): 'Unsave Cursor',
+    jsonEncode([27, 55]): 'Save Cursor & Attrs',
+    jsonEncode([27, 56]): 'Restore Cursor & Attrs',
     // Scrolling
-    JSON.encode([27, 91, 114]): 'Scroll Screen',
-    JSON.encode([27, 68]): 'Scroll Down',
-    JSON.encode([27, 77]): 'Scroll Up',
+    jsonEncode([27, 91, 114]): 'Scroll Screen',
+    jsonEncode([27, 68]): 'Scroll Down',
+    jsonEncode([27, 77]): 'Scroll Up',
     // Tab Control
-    JSON.encode([27, 72]): 'Set Tab',
-    JSON.encode([27, 91, 103]): 'Clear Tab',
-    JSON.encode([27, 91, 51, 103]): 'Clear All Tabs',
+    jsonEncode([27, 72]): 'Set Tab',
+    jsonEncode([27, 91, 103]): 'Clear Tab',
+    jsonEncode([27, 91, 51, 103]): 'Clear All Tabs',
     // Keypad Character Selection
-    JSON.encode([27, 61]): 'Keypad Application',
-    JSON.encode([27, 62]): 'Keypad Numeric',
+    jsonEncode([27, 61]): 'Keypad Application',
+    jsonEncode([27, 62]): 'Keypad Numeric',
     // Erasing Text
-    JSON.encode([27, 91, 75]): 'Erase End of Line',
-    JSON.encode([27, 91, 49, 75]): 'Erase Start of Line',
-    JSON.encode([27, 91, 50, 75]): 'Erase Line',
-    JSON.encode([27, 91, 74]): 'Erase Down',
-    JSON.encode([27, 91, 49, 74]): 'Erase Up',
-    JSON.encode([27, 91, 50, 74]): 'Erase Screen',
+    jsonEncode([27, 91, 75]): 'Erase End of Line',
+    jsonEncode([27, 91, 49, 75]): 'Erase Start of Line',
+    jsonEncode([27, 91, 50, 75]): 'Erase Line',
+    jsonEncode([27, 91, 74]): 'Erase Down',
+    jsonEncode([27, 91, 49, 74]): 'Erase Up',
+    jsonEncode([27, 91, 50, 74]): 'Erase Screen',
     // Printing
-    JSON.encode([27, 91, 105]): 'Print Screen',
-    JSON.encode([27, 91, 49, 105]): 'Print Line',
-    JSON.encode([27, 91, 52, 105]): 'Stop Print Log',
-    JSON.encode([27, 91, 53, 105]): 'Start Print Log'
+    jsonEncode([27, 91, 105]): 'Print Screen',
+    jsonEncode([27, 91, 49, 105]): 'Print Line',
+    jsonEncode([27, 91, 52, 105]): 'Stop Print Log',
+    jsonEncode([27, 91, 53, 105]): 'Start Print Log'
   };
 
   static Map variableEscapeTerminators = {
@@ -70,7 +70,7 @@ class EscapeHandler {
   };
 
   static String printEsc(List<int> escape) {
-    return '<ESC>' + UTF8.decode(escape.sublist(1));
+    return '<ESC>' + base64Encode(escape.sublist(1));
   }
 
   static bool handleEscape(List<int> escape, StreamController<List<int>> stdin, Model model, DisplayAttributes currAttributes) {
@@ -79,7 +79,7 @@ class EscapeHandler {
       return true;
     }
 
-    String encodedEscape = JSON.encode(escape);
+    String encodedEscape = jsonEncode(escape);
     if (constantEscapes.containsKey(encodedEscape)) {
       _handleConstantEscape(encodedEscape, stdin, model, currAttributes, escape);
       return true;
@@ -193,8 +193,8 @@ class EscapeHandler {
 
   static void _scrollScreen(List<int> escape, Model model) {
     int indexOfSemi = escape.indexOf(59);
-    int start = int.parse(UTF8.decode(escape.sublist(2, indexOfSemi))) - 1;
-    int end = int.parse(UTF8.decode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
+    int start = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
+    int end = int.parse(base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
     //print('Scrolling: $start to $end');
     model.scrollScreen(start, end);
   }
@@ -213,8 +213,8 @@ class EscapeHandler {
       col = 0;
     } else {
       int indexOfSemi = escape.indexOf(59);
-      row = int.parse(UTF8.decode(escape.sublist(2, indexOfSemi))) - 1;
-      col = int.parse(UTF8.decode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
+      row = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
+      col = int.parse(base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
     }
 
     model.cursorHome(row, col);
@@ -225,7 +225,7 @@ class EscapeHandler {
       model.cursorUp();
     } else {
       escape = escape.sublist(2, escape.length - 1);
-      model.cursorUp(int.parse(UTF8.decode(escape)));
+      model.cursorUp(int.parse(base64Encode(escape)));
     }
   }
 
@@ -234,7 +234,7 @@ class EscapeHandler {
       model.cursorDown();
     } else {
       escape = escape.sublist(2, escape.length - 1);
-      model.cursorDown(int.parse(UTF8.decode(escape)));
+      model.cursorDown(int.parse(base64Encode(escape)));
     }
   }
 
@@ -243,7 +243,7 @@ class EscapeHandler {
       model.cursorForward();
     } else {
       escape = escape.sublist(2, escape.length - 1);
-      model.cursorForward(int.parse(UTF8.decode(escape)));
+      model.cursorForward(int.parse(base64Encode(escape)));
     }
   }
 
@@ -252,14 +252,14 @@ class EscapeHandler {
         model.cursorBackward();
       } else {
         escape = escape.sublist(2, escape.length - 1);
-        model.cursorBackward(int.parse(UTF8.decode(escape)));
+        model.cursorBackward(int.parse(base64Encode(escape)));
       }
     }
 
   /// Sets multiple display attribute settings.
   /// Sets local [DisplayAttributes], given [escape].
   static void _setAttributeMode(List<int> escape, DisplayAttributes attr) {
-    String decodedEsc = UTF8.decode(escape);
+    String decodedEsc = base64Encode(escape);
 
     if (decodedEsc.contains('0m')) {
       attr.resetAll();

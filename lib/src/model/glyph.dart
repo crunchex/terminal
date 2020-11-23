@@ -1,4 +1,4 @@
-part of model;
+part of terminal.src.model.model;
 
 /// The data model class for an individual glyph within [Model].
 class Glyph {
@@ -27,7 +27,7 @@ class Glyph {
     bgColor = attr.bgColor;
   }
 
-  operator ==(Glyph other) {
+  operator ==(other) {
     return (value == other.value
             && bright == other.bright
             && dim == other.dim
@@ -78,6 +78,6 @@ class Glyph {
       'fgColor': fgColor,
       'bgColor': bgColor
     };
-    return JSON.encode(properties);
+    return jsonEncode(properties);
   }
 }

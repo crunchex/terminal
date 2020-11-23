@@ -66,9 +66,7 @@ class OutputHandler {
 
   /// Appends a new [SpanElement] with the contents of [_outString]
   /// to the [_buffer] and updates the display.
-  void _handleOutString(List<int> string, Model model, Controller controller, DisplayAttributes currAttributes) {
-    //print('string: ' + string.toString());
-    var codes = UTF8.decode(string).codeUnits;
+  void _handleOutString(List<int> codes, Model model, Controller controller, DisplayAttributes currAttributes) {
     for (var code in codes) {
       String char = new String.fromCharCode(code);
 

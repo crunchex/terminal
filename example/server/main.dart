@@ -14,7 +14,7 @@ WebSocket websocket;
 void initServer() {
   // Set up an HTTP webserver and listen for standard page requests or upgraded
   // [WebSocket] requests.
-  HttpServer.bind(InternetAddress.ANY_IP_V4, 8080).then((HttpServer server) {
+  HttpServer.bind(InternetAddress.anyIPv4, 8080).then((HttpServer server) {
     print("HttpServer listening on port:${server.port}...");
     server.asBroadcastStream()
     .listen((HttpRequest request) => routeRequest(request))
@@ -75,8 +75,8 @@ void startPty() {
   Process.start('cmdr-pty', ['-p', 'tcp'], environment: {'TERM':'vt100'}).then((Process p) {
     pty = p;
 
-    pty.stderr.transform(UTF8.decoder).listen((data) => print('[cmdr-pty stderr]: $data'));
-    pty.stdout.transform(UTF8.decoder).listen((data) {
+    pty.stderr.transform(utf8.decoder).listen((data) => print('[cmdr-pty stderr]: $data'));
+    pty.stdout.transform(utf8.decoder).listen((data) {
       if (data.contains('listening on port: ')) {
         // Get the port returned by cmdr-pty.
         String port = data.replaceFirst('listening on port: ', '');
