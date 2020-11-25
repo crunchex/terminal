@@ -58,15 +58,15 @@ class Terminal {
     _terminal = _createTerminalOutputDiv();
     _cursor = _createTerminalCursorDiv();
 
-    _inputHandler = new InputHandler();
-    _outputHandler = new OutputHandler();
+    _inputHandler = InputHandler();
+    _outputHandler = OutputHandler();
 
-    _currAttributes = new DisplayAttributes();
-    _theme = new Theme.SolarizedDark();
+    _currAttributes = DisplayAttributes();
+    _theme = Theme.SolarizedDark();
 
     List<int> size = calculateSize();
-    _model = new Model(size[0], size[1]);
-    _controller = new Controller(_terminal, _cursor, _model, _theme);
+    _model = Model(size[0], size[1]);
+    _controller = Controller(_terminal, _cursor, _model, _theme);
 
     _controller.refreshDisplay();
 
@@ -78,9 +78,9 @@ class Terminal {
   }
 
   void resize(int newRows, int newCols) {
-    _model = new Model.fromOldModel(newRows, newCols, _model);
+    _model = Model.fromOldModel(newRows, newCols, _model);
     _controller.cancelBlink();
-    _controller = new Controller(_terminal, _cursor, _model, _theme);
+    _controller = Controller(_terminal, _cursor, _model, _theme);
 
     // User expects the prompt to appear after a resize.
     // Sending a \n results in a blank line above the first
@@ -107,7 +107,7 @@ class Terminal {
 
   DivElement _createTerminalOutputDiv() {
     // contenteditable is important for clipboard paste functionality.
-    DivElement termOutput = new DivElement()
+    DivElement termOutput = DivElement()
       ..tabIndex = 0
       ..classes.add('terminal-output')
       ..spellcheck = false;
@@ -121,7 +121,7 @@ class Terminal {
   }
 
   DivElement _createTerminalCursorDiv() {
-    DivElement termCursor = new DivElement()
+    DivElement termCursor = DivElement()
       ..classes.add('terminal-cursor')
       ..text = Glyph.CURSOR;
 
@@ -131,7 +131,7 @@ class Terminal {
 
   void _registerEventHandlers() {
     stdout.stream.listen((List<int> out) => _outputHandler.processStdOut(
-        new List.from(out), _controller, stdin, _model, _currAttributes));
+        List.from(out), _controller, stdin, _model, _currAttributes));
 
     _terminal.onKeyDown.listen((e) {
       e.preventDefault();

@@ -49,9 +49,8 @@ class Controller {
   void setUpBlink() {
     if (!cursorBlink) return;
 
-    _blinkTimeout = new Timer(new Duration(milliseconds: 1000), () {
-      _blinkTimer =
-          new Timer.periodic(new Duration(milliseconds: 500), (timer) {
+    _blinkTimeout = Timer(Duration(milliseconds: 1000), () {
+      _blinkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
         blinkOn = !blinkOn;
         _drawCursor();
       });
@@ -84,7 +83,7 @@ class Controller {
   DivElement _generateRow(int r) {
     Glyph prev, curr;
 
-    DivElement row = new DivElement();
+    DivElement row = DivElement();
     String str = '';
     prev = _model.getGlyphAt(r, 0);
     for (int c = 0; c < _model.numCols; c++) {
@@ -92,12 +91,12 @@ class Controller {
 
       if (!curr.hasSameAttributes(prev) || c == _model.numCols - 1) {
         if (prev.hasDefaults()) {
-          row.append(new DocumentFragment.html(str));
+          row.append(DocumentFragment.html(str));
         } else {
-          SpanElement span = new SpanElement();
+          SpanElement span = SpanElement();
           span.style.color = _theme.colors[prev.fgColor];
           span.style.backgroundColor = _theme.colors[prev.bgColor];
-          span.append(new DocumentFragment.html(str));
+          span.append(DocumentFragment.html(str));
           row.append(span);
         }
 

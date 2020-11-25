@@ -43,15 +43,15 @@ void routeRequest(HttpRequest request) {
 VirtualDirectory getVirDir() {
   String guiPath = path.join(path.dirname(Platform.script.toFilePath()), 'web');
 
-  VirtualDirectory virDir = new VirtualDirectory(guiPath)
+  VirtualDirectory virDir = VirtualDirectory(guiPath)
     ..allowDirectoryListing = true
     ..followLinks = true
     ..jailRoot = false;
 
   // Redirects '/' to 'index.html'
   virDir.directoryHandler = (dir, request) {
-    var indexUri = new Uri.file(dir.path).resolve('index.html');
-    virDir.serveFile(new File(indexUri.toFilePath()), request);
+    var indexUri = Uri.file(dir.path).resolve('index.html');
+    virDir.serveFile(File(indexUri.toFilePath()), request);
   };
 
   return virDir;

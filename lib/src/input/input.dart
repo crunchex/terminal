@@ -10,7 +10,7 @@ class InputHandler {
   StreamController<List<int>> stdin;
 
   InputHandler() {
-    stdin = new StreamController<List<int>>();
+    stdin = StreamController<List<int>>();
   }
 
   /// Handles a given [KeyboardEvent].

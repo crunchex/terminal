@@ -17,7 +17,7 @@ class OutputHandler {
   List<int> _incompleteEscape;
 
   OutputHandler() {
-    stdout = new StreamController<List<int>>.broadcast();
+    stdout = StreamController<List<int>>.broadcast();
     _incompleteEscape = [];
   }
 
@@ -28,7 +28,7 @@ class OutputHandler {
     //print('incoming output: ' + output.toString());
 
     // Insert the incompleteEscape from last processing if exists.
-    List<int> outputToProcess = new List.from(_incompleteEscape);
+    List<int> outputToProcess = List.from(_incompleteEscape);
     _incompleteEscape = [];
     outputToProcess.addAll(output);
 
@@ -66,7 +66,7 @@ class OutputHandler {
       }
     }
 
-    _incompleteEscape = new List.from(output);
+    _incompleteEscape = List.from(output);
     return [];
   }
 
@@ -75,7 +75,7 @@ class OutputHandler {
   void _handleOutString(List<int> codes, Model model, Controller controller,
       DisplayAttributes currAttributes) {
     for (var code in codes) {
-      String char = new String.fromCharCode(code);
+      String char = String.fromCharCode(code);
 
       if (code == 8) {
         model.backspace();
@@ -116,7 +116,7 @@ class OutputHandler {
         model.cursorCarriageReturn();
         model.cursorNewLine();
       } else {
-        Glyph g = new Glyph(char, currAttributes);
+        Glyph g = Glyph(char, currAttributes);
         model.setGlyphAt(g, model.cursor.row, model.cursor.col);
         model.cursorForward();
       }

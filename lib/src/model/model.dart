@@ -39,7 +39,7 @@ class Model {
   int _scrollStart, _scrollEnd;
 
   Model(this.numRows, this.numCols) {
-    cursor = new Cursor();
+    cursor = Cursor();
     keypad = KeypadMode.NUMERIC;
     cursorkeys = CursorkeysMode.NORMAL;
 
@@ -51,7 +51,7 @@ class Model {
   }
 
   Model.fromOldModel(this.numRows, this.numCols, Model oldModel) {
-    cursor = new Cursor();
+    cursor = Cursor();
     keypad = oldModel.keypad;
     cursorkeys = oldModel.cursorkeys;
 
@@ -84,7 +84,7 @@ class Model {
   /// Returns the [Glyph] at row, col.
   Glyph getGlyphAt(int row, int col) {
     if (col >= _frame[row].length) {
-      _frame[row].add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+      _frame[row].add(Glyph(Glyph.SPACE, DisplayAttributes()));
     }
     return _frame[row][col];
   }
@@ -170,10 +170,9 @@ class Model {
   void cursorNewLine() {
     //print('cursorNewLine');
     if (_forwardBuffer.isNotEmpty) {
-      _forwardBuffer.insert(0, new List<Glyph>());
+      _forwardBuffer.insert(0, List<Glyph>());
       for (int c = 0; c < numCols; c++) {
-        _forwardBuffer.first
-            .add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+        _forwardBuffer.first.add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
       return;
     }
@@ -197,8 +196,7 @@ class Model {
   void eraseEndOfLine() {
     //cursorBackward();
     for (int i = cursor.col; i < _frame[cursor.row].length; i++) {
-      setGlyphAt(
-          new Glyph(Glyph.SPACE, new DisplayAttributes()), cursor.row, i);
+      setGlyphAt(Glyph(Glyph.SPACE, DisplayAttributes()), cursor.row, i);
     }
   }
 
@@ -268,7 +266,7 @@ class Model {
 
     List<Glyph> newRow = [];
     for (int c = 0; c < numCols; c++) {
-      newRow.add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+      newRow.add(Glyph(Glyph.SPACE, DisplayAttributes()));
     }
     _frame.add(newRow);
   }
@@ -283,9 +281,9 @@ class Model {
   void _scrollUp(int numLines) {
     for (int i = 0; i < numLines; i++) {
       _frame.removeAt(numRows - 2);
-      _frame.insert(0, new List<Glyph>());
+      _frame.insert(0, List<Glyph>());
       for (int c = 0; c < numCols; c++) {
-        _frame[0].add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+        _frame[0].add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
     }
   }
@@ -295,10 +293,9 @@ class Model {
   void _scrollDown(int numLines) {
     for (int i = 0; i < numLines; i++) {
       _frame.removeAt(0);
-      _frame.insert(numRows - 2, new List<Glyph>());
+      _frame.insert(numRows - 2, List<Glyph>());
       for (int c = 0; c < numCols; c++) {
-        _frame[numRows - 2]
-            .add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+        _frame[numRows - 2].add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
     }
   }
@@ -307,9 +304,9 @@ class Model {
   /// Each location defaults to a Glyph.SPACE.
   void _initModel() {
     for (int r = 0; r < numRows; r++) {
-      _frame.add(new List<Glyph>());
+      _frame.add(List<Glyph>());
       for (int c = 0; c < numCols; c++) {
-        _frame[r].add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+        _frame[r].add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
     }
   }

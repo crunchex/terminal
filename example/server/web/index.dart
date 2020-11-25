@@ -13,10 +13,10 @@ void main() {
   status = querySelector('#status');
   invert = querySelector('#invert');
 
-  term = new Terminal(querySelector('#console'))
+  term = Terminal(querySelector('#console'))
     ..scrollSpeed = 3
     ..cursorBlink = true
-    ..theme = new Theme.SolarizedDark();
+    ..theme = Theme.SolarizedDark();
 
   List<int> size = term.currentSize();
   int rows = size[0];
@@ -28,7 +28,7 @@ void main() {
 
   // Terminal input.
   term.stdin.stream.listen((data) {
-    ws.sendByteBuffer(new Uint8List.fromList(data).buffer);
+    ws.sendByteBuffer(Uint8List.fromList(data).buffer);
   });
 
   restartWebsocket();
@@ -55,7 +55,7 @@ void restartWebsocket() {
 void initWebSocket(String url, [int retrySeconds = 2]) {
   bool encounteredError = false;
 
-  ws = new WebSocket(url);
+  ws = WebSocket(url);
   ws.binaryType = "arraybuffer";
 
   ws.onOpen.listen((e) => updateStatusConnect());
@@ -71,8 +71,7 @@ void initWebSocket(String url, [int retrySeconds = 2]) {
   ws.onError.listen((e) {
     print('Terminal disconnected due to ERROR. Retrying...');
     if (!encounteredError) {
-      new Timer(
-          new Duration(seconds: retrySeconds), () => initWebSocket(url, 4));
+      Timer(Duration(seconds: retrySeconds), () => initWebSocket(url, 4));
     }
     encounteredError = true;
   });
@@ -80,8 +79,8 @@ void initWebSocket(String url, [int retrySeconds = 2]) {
 
 void invertTheme() {
   if (term.theme.name == 'solarized-dark') {
-    term.theme = new Theme.SolarizedLight();
+    term.theme = Theme.SolarizedLight();
   } else {
-    term.theme = new Theme.SolarizedDark();
+    term.theme = Theme.SolarizedDark();
   }
 }
