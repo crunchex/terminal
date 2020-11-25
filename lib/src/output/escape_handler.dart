@@ -71,8 +71,8 @@ class EscapeHandler {
 
   static String printEsc(List<int> escape) {
     var decoder = new Utf8Decoder();
-    return '<ESC> ${decoder.convert(escape)}';
-    // return '<ESC> ' + base64Encode(escape.sublist(1));
+    return '<ESC>${decoder.convert(escape)}';
+    // return '<ESC>' + base64Encode(escape.sublist(1));
   }
 
   static bool handleEscape(List<int> escape, StreamController<List<int>> stdin,
@@ -185,30 +185,33 @@ class EscapeHandler {
 
   static void _setMode(List<int> escape, Model model) {
     // print('Set Mode: ${printEsc(escape)}');
-    switch (printEsc(escape)) {
-      case '<ESC> [?1h':
+    var printedEsc = printEsc(escape);
+    print(printedEsc);
+    switch (printedEsc) {
+      case '<ESC>[?1h':
         model.cursorkeys = CursorkeysMode.APPLICATION;
         break;
-      case '<ESC> [?2004h':
+      case '<ESC>[?2004h':
         // Turn on bracketed paste mode.
         // Text pasted into the terminal will be surrounded by ESC [200~ and ESC [201~,
         // and characters in it should not be treated as commands (for example in Vim).
         // From Unix terminal emulators.
-        print('Set Mode: bracketed paste mode "on" not yet suppoerted');
+        print('Set Mode: bracketed paste mode "on" not yet supported');
         break;
       default:
-        print('Set Mode: ${printEsc(escape)} not yet supported');
+        print('Set Mode: ${printedEsc} not yet supported');
     }
   }
 
   static void _resetMode(List<int> escape, Model model) {
     //print('Reset Mode: ${printEsc(escape)}');
-    switch (printEsc(escape)) {
+    var printedEsc = printEsc(escape);
+    switch (printedEsc) {
       case '<ESC> [?1l':
         model.cursorkeys = CursorkeysMode.NORMAL;
         break;
       default:
-        print('Reset Mode: ${printEsc(escape)} not yet supported');
+        print('Reset Mode: ${printedEsc} not yet supported');
     }
   }
 
