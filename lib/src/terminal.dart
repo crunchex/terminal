@@ -8,6 +8,8 @@ import 'controller.dart';
 import 'model/model.dart';
 import 'input/input.dart';
 import 'output/output.dart';
+import 'model/display_attributes.dart';
+import 'model/glyph.dart';
 
 /// A class for rendering a terminal emulator in a [DivElement] (param).
 /// [stdout] needs to receive individual UTF8 integers and will handle

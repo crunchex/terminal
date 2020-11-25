@@ -5,6 +5,7 @@ import 'dart:html';
 
 import 'theme.dart';
 import 'model/model.dart';
+import 'model/glyph.dart';
 
 class Controller {
   DivElement div;

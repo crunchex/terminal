@@ -1,4 +1,10 @@
-part of terminal.src.output.output;
+library escape_handler;
+
+import 'dart:convert';
+import 'dart:async';
+
+import '../model/display_attributes.dart';
+import '../model/model.dart';
 
 class EscapeHandler {
   // Taken from: http://www.termsys.demon.co.uk/vtansi.htm

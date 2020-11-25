@@ -1,11 +1,7 @@
-library terminal.src.model.model;
+library model;
 
-import 'dart:convert';
-
-import 'package:quiver/core.dart';
-
-part 'display_attributes.dart';
-part 'glyph.dart';
+import './display_attributes.dart';
+import './glyph.dart';
 
 class Cursor {
   int row = 0;

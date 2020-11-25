@@ -1,4 +1,6 @@
-part of terminal.src.model.model;
+library display_attributes;
+
+import 'dart:convert';
 
 /// Holds the current state of [Terminal] display attributes.
 class DisplayAttributes {

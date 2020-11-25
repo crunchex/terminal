@@ -1,11 +1,10 @@
-library terminal.src.input.input;
+library input;
 
 import 'dart:html';
 import 'dart:async';
 
 import '../model/model.dart';
-
-part 'input_keys.dart';
+import './input_keys.dart';
 
 class InputHandler {
   StreamController<List<int>> stdin;

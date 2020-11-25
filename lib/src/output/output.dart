@@ -1,12 +1,13 @@
-library terminal.src.output.output;
+library output;
 
 import 'dart:async';
-import 'dart:convert';
 
 import '../model/model.dart';
+import '../model/glyph.dart';
 import '../controller.dart';
 
-part 'escape_handler.dart';
+import './escape_handler.dart';
+import '../model/display_attributes.dart';
 
 class OutputHandler {
   static const int ESC = 27;

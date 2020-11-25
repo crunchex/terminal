@@ -1,4 +1,8 @@
-part of terminal.src.model.model;
+library glyph;
+
+import 'dart:convert';
+import 'package:quiver/core.dart';
+import './display_attributes.dart';
 
 /// The data model class for an individual glyph within [Model].
 class Glyph {
