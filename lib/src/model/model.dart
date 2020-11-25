@@ -11,7 +11,7 @@ class Cursor {
   int row = 0;
   int col = 0;
 
-  String toString () {
+  String toString() {
     return 'row: $row, col: $col';
   }
 }
@@ -23,13 +23,12 @@ enum CursorkeysMode { NORMAL, APPLICATION }
 class Model {
   static const int _MAXBUFFER = 500;
 
-  bool get atBottom =>_forwardBuffer.isEmpty;
+  bool get atBottom => _forwardBuffer.isEmpty;
 
   Cursor cursor;
   int numRows, numCols;
   KeypadMode keypad;
   CursorkeysMode cursorkeys;
-
 
   // Implemented as stacks in scrolling.
   List<List> _reverseBuffer;
@@ -43,7 +42,7 @@ class Model {
 
   int _scrollStart, _scrollEnd;
 
-  Model (this.numRows, this.numCols) {
+  Model(this.numRows, this.numCols) {
     cursor = new Cursor();
     keypad = KeypadMode.NUMERIC;
     cursorkeys = CursorkeysMode.NORMAL;
@@ -77,7 +76,8 @@ class Model {
 
     // Trim off oldest content to keep buffer below max.
     if (_reverseBuffer.length > _MAXBUFFER) {
-      _reverseBuffer = _reverseBuffer.sublist(_reverseBuffer.length - _MAXBUFFER);
+      _reverseBuffer =
+          _reverseBuffer.sublist(_reverseBuffer.length - _MAXBUFFER);
     }
     _forwardBuffer = [];
     _frame = [];
@@ -140,7 +140,8 @@ class Model {
     if (count == null) {
       cursor.row++;
     } else {
-      cursor.row = (cursor.row + count >= numRows) ? numRows - 1 : cursor.row + count;
+      cursor.row =
+          (cursor.row + count >= numRows) ? numRows - 1 : cursor.row + count;
     }
   }
 
@@ -150,7 +151,8 @@ class Model {
     if (count == null) {
       cursor.col++;
     } else {
-      cursor.col = (cursor.col + count >= numCols) ? numCols - 1 : cursor.col + count;
+      cursor.col =
+          (cursor.col + count >= numCols) ? numCols - 1 : cursor.col + count;
     }
   }
 
@@ -174,7 +176,8 @@ class Model {
     if (_forwardBuffer.isNotEmpty) {
       _forwardBuffer.insert(0, new List<Glyph>());
       for (int c = 0; c < numCols; c++) {
-        _forwardBuffer.first.add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+        _forwardBuffer.first
+            .add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
       }
       return;
     }
@@ -198,7 +201,8 @@ class Model {
   void eraseEndOfLine() {
     //cursorBackward();
     for (int i = cursor.col; i < _frame[cursor.row].length; i++) {
-      setGlyphAt(new Glyph(Glyph.SPACE, new DisplayAttributes()), cursor.row, i);
+      setGlyphAt(
+          new Glyph(Glyph.SPACE, new DisplayAttributes()), cursor.row, i);
     }
   }
 
@@ -297,7 +301,8 @@ class Model {
       _frame.removeAt(0);
       _frame.insert(numRows - 2, new List<Glyph>());
       for (int c = 0; c < numCols; c++) {
-        _frame[numRows - 2].add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
+        _frame[numRows - 2]
+            .add(new Glyph(Glyph.SPACE, new DisplayAttributes()));
       }
     }
   }

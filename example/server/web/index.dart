@@ -71,7 +71,8 @@ void initWebSocket(String url, [int retrySeconds = 2]) {
   ws.onError.listen((e) {
     print('Terminal disconnected due to ERROR. Retrying...');
     if (!encounteredError) {
-      new Timer(new Duration(seconds:retrySeconds), () => initWebSocket(url, 4));
+      new Timer(
+          new Duration(seconds: retrySeconds), () => initWebSocket(url, 4));
     }
     encounteredError = true;
   });

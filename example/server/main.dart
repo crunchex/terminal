@@ -16,10 +16,11 @@ void initServer() {
   // [WebSocket] requests.
   HttpServer.bind(InternetAddress.anyIPv4, 8080).then((HttpServer server) {
     print("HttpServer listening on port:${server.port}...");
-    server.asBroadcastStream()
-    .listen((HttpRequest request) => routeRequest(request))
-    .asFuture()  // Automatically cancels on error.
-    .catchError((_) => print("caught error"));
+    server
+        .asBroadcastStream()
+        .listen((HttpRequest request) => routeRequest(request))
+        .asFuture() // Automatically cancels on error.
+        .catchError((_) => print("caught error"));
   });
 }
 
@@ -72,10 +73,13 @@ void handleStandardRequest(HttpRequest request) {
 /// cmdr-pty is a go program that provides a direct hook to a system pty.
 /// See http://www.github.com/updroidinc/cmdr-pty
 void startPty() {
-  Process.start('cmdr-pty', ['-p', 'tcp'], environment: {'TERM':'vt100'}).then((Process p) {
+  Process.start('cmdr-pty', ['-p', 'tcp'], environment: {'TERM': 'vt100'})
+      .then((Process p) {
     pty = p;
 
-    pty.stderr.transform(utf8.decoder).listen((data) => print('[cmdr-pty stderr]: $data'));
+    pty.stderr
+        .transform(utf8.decoder)
+        .listen((data) => print('[cmdr-pty stderr]: $data'));
     pty.stdout.transform(utf8.decoder).listen((data) {
       if (data.contains('listening on port: ')) {
         // Get the port returned by cmdr-pty.
@@ -97,7 +101,8 @@ void startPty() {
 /// Manages the IO between websocket and socket for the terminal.
 void handleIO(Socket s) {
   socket = s;
-  print('server example connected to cmdr-pty via: ${socket.remoteAddress.address}:${socket.remotePort}');
+  print(
+      'server example connected to cmdr-pty via: ${socket.remoteAddress.address}:${socket.remotePort}');
 
   // Output from cmdr-pty -> the client connected via websocket.
   socket.listen((data) => websocket.add((data)));

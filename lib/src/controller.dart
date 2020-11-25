@@ -18,6 +18,7 @@ class Controller {
 
   /// Returns current [Theme].
   Theme get theme => _theme;
+
   /// Sets a [Terminal]'s [Theme]. Default: Solarized-Dark.
   void set theme(Theme thm) => setTheme(thm);
 
@@ -48,7 +49,8 @@ class Controller {
     if (!cursorBlink) return;
 
     _blinkTimeout = new Timer(new Duration(milliseconds: 1000), () {
-      _blinkTimer = new Timer.periodic(new Duration(milliseconds: 500), (timer) {
+      _blinkTimer =
+          new Timer.periodic(new Duration(milliseconds: 500), (timer) {
         blinkOn = !blinkOn;
         _drawCursor();
       });
@@ -69,8 +71,10 @@ class Controller {
 
     cursor.style.color = _theme.colors['white'];
     // TODO: make offset calculation dynamic.
-    cursor.style.left = ((_model.cursor.col * _theme.charWidth) + 5).toString() + 'px';
-    cursor.style.top = ((_model.cursor.row * _theme.charHeight) + 5).toString() + 'px';
+    cursor.style.left =
+        ((_model.cursor.col * _theme.charWidth) + 5).toString() + 'px';
+    cursor.style.top =
+        ((_model.cursor.row * _theme.charHeight) + 5).toString() + 'px';
   }
 
   /// Generates the HTML for an individual row given

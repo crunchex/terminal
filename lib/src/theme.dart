@@ -17,14 +17,14 @@ class Theme {
   Theme.SolarizedDark() {
     name = 'solarized-dark';
     colors = {
-      'black'   : '#002b36',
-      'red'     : '#dc322f',
-      'green'   : '#859900',
-      'yellow'  : '#b58900',
-      'blue'    : '#268bd2',
-      'magenta' : '#d33682',
-      'cyan'    : '#2aa198',
-      'white'   : '#93a1a1'
+      'black': '#002b36',
+      'red': '#dc322f',
+      'green': '#859900',
+      'yellow': '#b58900',
+      'blue': '#268bd2',
+      'magenta': '#d33682',
+      'cyan': '#2aa198',
+      'white': '#93a1a1'
     };
 
     foregroundColor = colors['white'];
@@ -34,14 +34,14 @@ class Theme {
   Theme.SolarizedLight() {
     name = 'solarized-light';
     colors = {
-      'black'   : '#fdf6e3',
-      'red'     : '#dc322f',
-      'green'   : '#859900',
-      'yellow'  : '#b58900',
-      'blue'    : '#268bd2',
-      'magenta' : '#d33682',
-      'cyan'    : '#2aa198',
-      'white'   : '#586e75'
+      'black': '#fdf6e3',
+      'red': '#dc322f',
+      'green': '#859900',
+      'yellow': '#b58900',
+      'blue': '#268bd2',
+      'magenta': '#d33682',
+      'cyan': '#2aa198',
+      'white': '#586e75'
     };
 
     foregroundColor = colors['white'];

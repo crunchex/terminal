@@ -28,8 +28,8 @@ void main() {
   print('└─> cmdr-pty size should be set to $rows x ${cols - 1}');
 
   address.onKeyPress
-  .where((e) => e.keyCode == KeyCode.ENTER)
-  .listen((_) => restartWebsocket());
+      .where((e) => e.keyCode == KeyCode.ENTER)
+      .listen((_) => restartWebsocket());
 
   connect.onClick.listen((_) => restartWebsocket());
   invert.onClick.listen((_) => invertTheme());
