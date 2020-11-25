@@ -70,18 +70,23 @@ class EscapeHandler {
   };
 
   static String printEsc(List<int> escape) {
-    return '<ESC>' + base64Encode(escape.sublist(1));
+    var decoder = new Utf8Decoder();
+    return '<ESC> ${decoder.convert(escape)}';
+    // return '<ESC> ' + base64Encode(escape.sublist(1));
   }
 
-  static bool handleEscape(List<int> escape, StreamController<List<int>> stdin, Model model, DisplayAttributes currAttributes) {
+  static bool handleEscape(List<int> escape, StreamController<List<int>> stdin,
+      Model model, DisplayAttributes currAttributes) {
     if (escape.length != 1 && escape.last == 27) {
-      print('Unknown escape detected: ${printEsc(escape.sublist(0, escape.length - 1))}');
+      print(
+          'Unknown escape detected: ${printEsc(escape.sublist(0, escape.length - 1))}');
       return true;
     }
 
     String encodedEscape = jsonEncode(escape);
     if (constantEscapes.containsKey(encodedEscape)) {
-      _handleConstantEscape(encodedEscape, stdin, model, currAttributes, escape);
+      _handleConstantEscape(
+          encodedEscape, stdin, model, currAttributes, escape);
       return true;
     } else if (variableEscapeTerminators.containsKey(escape.last)) {
       _handleVariableEscape(encodedEscape, escape, currAttributes, model);
@@ -91,7 +96,12 @@ class EscapeHandler {
     return false;
   }
 
-  static void _handleConstantEscape(String encodedEscape, StreamController<List<int>> stdin, Model model, DisplayAttributes currAttributes, List<int> escape) {
+  static void _handleConstantEscape(
+      String encodedEscape,
+      StreamController<List<int>> stdin,
+      Model model,
+      DisplayAttributes currAttributes,
+      List<int> escape) {
     //print('Constant escape: ${constantEscapes[encodedEscape]} ${printEsc(escape)}');
     switch (constantEscapes[encodedEscape]) {
       case 'Query Cursor Position':
@@ -125,11 +135,13 @@ class EscapeHandler {
         model.setKeypadMode(KeypadMode.NUMERIC);
         break;
       default:
-        print('Constant escape : ${constantEscapes[encodedEscape]} (${escape.toString()}) not yet supported');
+        print(
+            'Constant escape : ${constantEscapes[encodedEscape]} (${escape.toString()}) not yet supported');
     }
   }
 
-  static void _handleVariableEscape(String encodedEscape, List<int> escape, DisplayAttributes currAttributes, Model model) {
+  static void _handleVariableEscape(String encodedEscape, List<int> escape,
+      DisplayAttributes currAttributes, Model model) {
     //print('Variable escape: ${EscapeHandler.variableEscapeTerminators[escape.last]} ${printEsc(escape)}');
     switch (EscapeHandler.variableEscapeTerminators[escape.last]) {
       case 'Set Attribute Mode':
@@ -160,20 +172,29 @@ class EscapeHandler {
         _scrollScreen(escape, model);
         break;
       default:
-        print('Variable escape : ${variableEscapeTerminators[escape.last]} (${escape.toString()}) not yet supported');
+        print(
+            'Variable escape : ${variableEscapeTerminators[escape.last]} (${escape.toString()}) not yet supported');
     }
   }
 
-  static void _queryCursorPosition(StreamController<List<int>> stdin, Model model) {
+  static void _queryCursorPosition(
+      StreamController<List<int>> stdin, Model model) {
     // Sends back a Report Cursor Position - <ESC>[{ROW};{COLUMN}R
     stdin.add([27, 91, model.cursor.row, 59, model.cursor.col, 82]);
   }
 
   static void _setMode(List<int> escape, Model model) {
-    //print('Set Mode: ${printEsc(escape)}');
+    // print('Set Mode: ${printEsc(escape)}');
     switch (printEsc(escape)) {
-      case '<ESC>[?1h':
+      case '<ESC> [?1h':
         model.cursorkeys = CursorkeysMode.APPLICATION;
+        break;
+      case '<ESC> [?2004h':
+        // Turn on bracketed paste mode.
+        // Text pasted into the terminal will be surrounded by ESC [200~ and ESC [201~,
+        // and characters in it should not be treated as commands (for example in Vim).
+        // From Unix terminal emulators.
+        print('Set Mode: bracketed paste mode "on" not yet suppoerted');
         break;
       default:
         print('Set Mode: ${printEsc(escape)} not yet supported');
@@ -183,7 +204,7 @@ class EscapeHandler {
   static void _resetMode(List<int> escape, Model model) {
     //print('Reset Mode: ${printEsc(escape)}');
     switch (printEsc(escape)) {
-      case '<ESC>[?1l':
+      case '<ESC> [?1l':
         model.cursorkeys = CursorkeysMode.NORMAL;
         break;
       default:
@@ -194,7 +215,9 @@ class EscapeHandler {
   static void _scrollScreen(List<int> escape, Model model) {
     int indexOfSemi = escape.indexOf(59);
     int start = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
-    int end = int.parse(base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
+    int end = int.parse(
+            base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) -
+        1;
     //print('Scrolling: $start to $end');
     model.scrollScreen(start, end);
   }
@@ -214,7 +237,9 @@ class EscapeHandler {
     } else {
       int indexOfSemi = escape.indexOf(59);
       row = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
-      col = int.parse(base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) - 1;
+      col = int.parse(base64Encode(
+              escape.sublist(indexOfSemi + 1, escape.length - 1))) -
+          1;
     }
 
     model.cursorHome(row, col);
@@ -248,13 +273,13 @@ class EscapeHandler {
   }
 
   static void _cursorLeft(List<int> escape, Model model) {
-      if (escape.length == 3) {
-        model.cursorBackward();
-      } else {
-        escape = escape.sublist(2, escape.length - 1);
-        model.cursorBackward(int.parse(base64Encode(escape)));
-      }
+    if (escape.length == 3) {
+      model.cursorBackward();
+    } else {
+      escape = escape.sublist(2, escape.length - 1);
+      model.cursorBackward(int.parse(base64Encode(escape)));
     }
+  }
 
   /// Sets multiple display attribute settings.
   /// Sets local [DisplayAttributes], given [escape].

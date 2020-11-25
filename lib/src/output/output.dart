@@ -23,7 +23,7 @@ class OutputHandler {
   /// Processes [output] by coordinating handling of strings
   /// and escape parsing.
   void processStdOut(List<int> output, Controller controller, StreamController stdin, Model model, DisplayAttributes currAttributes) {
-    //print('incoming output: ' + output.toString());
+    // print('incoming output: ' + output.toString());
 
     // Insert the incompleteEscape from last processing if exists.
     List<int> outputToProcess = new List.from(_incompleteEscape);
@@ -46,6 +46,8 @@ class OutputHandler {
   /// Parses out escape sequences. When it finds one,
   /// it handles it and returns the remainder of [output].
   List<int> _parseEscape(List<int> output, Controller controller, StreamController stdin, Model model, DisplayAttributes currAttributes) {
+    // print('incoming output: ' + output.toString());
+
     List<int> escape;
     int termIndex;
 

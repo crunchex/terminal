@@ -1,5 +1,6 @@
 library terminal.src.terminal;
 
+import 'dart:convert';
 import 'dart:html';
 import 'dart:async';
 
@@ -126,7 +127,12 @@ class Terminal {
   }
 
   void _registerEventHandlers() {
-    stdout.stream.listen((List<int> out) => _outputHandler.processStdOut(new List.from(out), _controller, stdin, _model, _currAttributes));
+    // var decoder = new Utf8Decoder();
+    stdout.stream.listen((List<int> out) {
+      // print(out);
+      // print(decoder.convert(out));
+      _outputHandler.processStdOut(new List.from(out), _controller, stdin, _model, _currAttributes);
+    });
 
     _terminal.onKeyDown.listen((e) {
       e.preventDefault();
