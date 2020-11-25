@@ -30,11 +30,13 @@ class Terminal {
 
   /// Returns true if cursor blink is enabled.
   bool get cursorBlink => _controller.cursorBlink;
+
   /// Enable/disable cursor blink. Default: true
   void set cursorBlink(bool b) => _controller.setCursorBlink(b);
 
   /// Returns current [Theme].
   Theme get theme => _controller.theme;
+
   /// Sets a [Terminal]'s [Theme]. Default: Solarized-Dark.
   void set theme(Theme thm) {
     _theme = thm;
@@ -51,7 +53,7 @@ class Terminal {
   DisplayAttributes _currAttributes;
   Theme _theme;
 
-  Terminal (this.div) {
+  Terminal(this.div) {
     _terminal = _createTerminalOutputDiv();
     _cursor = _createTerminalCursorDiv();
 
@@ -131,7 +133,8 @@ class Terminal {
     stdout.stream.listen((List<int> out) {
       // print(out);
       // print(decoder.convert(out));
-      _outputHandler.processStdOut(new List.from(out), _controller, stdin, _model, _currAttributes);
+      _outputHandler.processStdOut(
+          new List.from(out), _controller, stdin, _model, _currAttributes);
     });
 
     _terminal.onKeyDown.listen((e) {
@@ -152,8 +155,10 @@ class Terminal {
       wheelEvent.preventDefault();
 
       cursorBlink = (_model.atBottom) ? true : false;
-     _controller.blinkOn = false;
-      (wheelEvent.deltaY < 0) ? _model.scrollUp(scrollSpeed) : _model.scrollDown(scrollSpeed);
+      _controller.blinkOn = false;
+      (wheelEvent.deltaY < 0)
+          ? _model.scrollUp(scrollSpeed)
+          : _model.scrollDown(scrollSpeed);
       _controller.refreshDisplay();
     });
 

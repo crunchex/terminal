@@ -16,7 +16,7 @@ class Glyph {
   bool bright, dim, underscore, blink, reverse, hidden;
   String value, fgColor, bgColor;
 
-  Glyph (this.value, DisplayAttributes attr) {
+  Glyph(this.value, DisplayAttributes attr) {
     bright = attr.bright;
     dim = attr.dim;
     underscore = attr.underscore;
@@ -28,41 +28,50 @@ class Glyph {
   }
 
   operator ==(other) {
-    return (value == other.value
-            && bright == other.bright
-            && dim == other.dim
-            && underscore == other.underscore
-            && blink == other.blink
-            && reverse == other.reverse
-            && hidden == other.hidden
-            && fgColor == other.fgColor
-            && bgColor == other.bgColor);
+    return (value == other.value &&
+        bright == other.bright &&
+        dim == other.dim &&
+        underscore == other.underscore &&
+        blink == other.blink &&
+        reverse == other.reverse &&
+        hidden == other.hidden &&
+        fgColor == other.fgColor &&
+        bgColor == other.bgColor);
   }
 
   bool hasSameAttributes(Glyph other) {
-    return (bright == other.bright
-            && dim == other.dim
-            && underscore == other.underscore
-            && blink == other.blink
-            && reverse == other.reverse
-            && hidden == other.hidden
-            && fgColor == other.fgColor
-            && bgColor == other.bgColor);
+    return (bright == other.bright &&
+        dim == other.dim &&
+        underscore == other.underscore &&
+        blink == other.blink &&
+        reverse == other.reverse &&
+        hidden == other.hidden &&
+        fgColor == other.fgColor &&
+        bgColor == other.bgColor);
   }
 
   bool hasDefaults() {
-    return (bright == false
-            && dim == false
-            && underscore == false
-            && blink == false
-            && reverse == false
-            && hidden == false
-            && fgColor == 'white'
-            && bgColor == 'black');
+    return (bright == false &&
+        dim == false &&
+        underscore == false &&
+        blink == false &&
+        reverse == false &&
+        hidden == false &&
+        fgColor == 'white' &&
+        bgColor == 'black');
   }
 
   int get hashCode {
-    List members = [bright, dim, underscore, blink, reverse, hidden, fgColor, bgColor];
+    List members = [
+      bright,
+      dim,
+      underscore,
+      blink,
+      reverse,
+      hidden,
+      fgColor,
+      bgColor
+    ];
     return hashObjects(members);
   }
 

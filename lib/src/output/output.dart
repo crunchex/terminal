@@ -22,7 +22,8 @@ class OutputHandler {
 
   /// Processes [output] by coordinating handling of strings
   /// and escape parsing.
-  void processStdOut(List<int> output, Controller controller, StreamController stdin, Model model, DisplayAttributes currAttributes) {
+  void processStdOut(List<int> output, Controller controller,
+      StreamController stdin, Model model, DisplayAttributes currAttributes) {
     // print('incoming output: ' + output.toString());
 
     // Insert the incompleteEscape from last processing if exists.
@@ -37,15 +38,18 @@ class OutputHandler {
         _handleOutString(outputToProcess, model, controller, currAttributes);
         return;
       } else {
-        _handleOutString(outputToProcess.sublist(0, nextEsc),  model, controller, currAttributes);
-        outputToProcess = _parseEscape(outputToProcess.sublist(nextEsc), controller, stdin, model, currAttributes);
+        _handleOutString(outputToProcess.sublist(0, nextEsc), model, controller,
+            currAttributes);
+        outputToProcess = _parseEscape(outputToProcess.sublist(nextEsc),
+            controller, stdin, model, currAttributes);
       }
     }
   }
 
   /// Parses out escape sequences. When it finds one,
   /// it handles it and returns the remainder of [output].
-  List<int> _parseEscape(List<int> output, Controller controller, StreamController stdin, Model model, DisplayAttributes currAttributes) {
+  List<int> _parseEscape(List<int> output, Controller controller,
+      StreamController stdin, Model model, DisplayAttributes currAttributes) {
     // print('incoming output: ' + output.toString());
 
     List<int> escape;
@@ -55,7 +59,8 @@ class OutputHandler {
       termIndex = i;
       escape = output.sublist(0, i);
 
-      bool escapeHandled = EscapeHandler.handleEscape(escape, stdin, model, currAttributes);
+      bool escapeHandled =
+          EscapeHandler.handleEscape(escape, stdin, model, currAttributes);
       if (escapeHandled) {
         controller.refreshDisplay();
         return output.sublist(termIndex);
@@ -68,7 +73,8 @@ class OutputHandler {
 
   /// Appends a new [SpanElement] with the contents of [_outString]
   /// to the [_buffer] and updates the display.
-  void _handleOutString(List<int> codes, Model model, Controller controller, DisplayAttributes currAttributes) {
+  void _handleOutString(List<int> codes, Model model, Controller controller,
+      DisplayAttributes currAttributes) {
     for (var code in codes) {
       String char = new String.fromCharCode(code);
 
