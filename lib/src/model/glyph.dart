@@ -1,4 +1,8 @@
-part of terminal.src.model.model;
+library glyph;
+
+import 'dart:convert';
+import 'package:quiver/core.dart';
+import './display_attributes.dart';
 
 /// The data model class for an individual glyph within [Model].
 class Glyph {
@@ -27,16 +31,18 @@ class Glyph {
     bgColor = attr.bgColor;
   }
 
-  operator ==(other) {
-    return (value == other.value &&
-        bright == other.bright &&
-        dim == other.dim &&
-        underscore == other.underscore &&
-        blink == other.blink &&
-        reverse == other.reverse &&
-        hidden == other.hidden &&
-        fgColor == other.fgColor &&
-        bgColor == other.bgColor);
+  @override
+  bool operator ==(Object other) {
+    var o = other as Glyph;
+    return (value == o.value &&
+        bright == o.bright &&
+        dim == o.dim &&
+        underscore == o.underscore &&
+        blink == o.blink &&
+        reverse == o.reverse &&
+        hidden == o.hidden &&
+        fgColor == o.fgColor &&
+        bgColor == o.bgColor);
   }
 
   bool hasSameAttributes(Glyph other) {
@@ -61,8 +67,9 @@ class Glyph {
         bgColor == 'black');
   }
 
+  @override
   int get hashCode {
-    List members = [
+    var members = [
       bright,
       dim,
       underscore,
@@ -75,8 +82,10 @@ class Glyph {
     return hashObjects(members);
   }
 
+  
+  @override
   String toString() {
-    Map properties = {
+    var properties = {
       'value': value,
       'bright': bright,
       'dim': dim,

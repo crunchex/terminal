@@ -1,10 +1,11 @@
-library terminal.src.controller;
+library controller;
 
 import 'dart:async';
 import 'dart:html';
 
-import 'theme.dart';
+import '../theme.dart';
 import 'model/model.dart';
+import 'model/glyph.dart';
 
 class Controller {
   DivElement div;
@@ -20,7 +21,7 @@ class Controller {
   Theme get theme => _theme;
 
   /// Sets a [Terminal]'s [Theme]. Default: Solarized-Dark.
-  void set theme(Theme thm) => setTheme(thm);
+  set theme(Theme thm) => setTheme(thm);
 
   Controller(this.div, this.cursor, Model model, Theme theme) {
     _model = model;
@@ -48,9 +49,8 @@ class Controller {
   void setUpBlink() {
     if (!cursorBlink) return;
 
-    _blinkTimeout = new Timer(new Duration(milliseconds: 1000), () {
-      _blinkTimer =
-          new Timer.periodic(new Duration(milliseconds: 500), (timer) {
+    _blinkTimeout = Timer(Duration(milliseconds: 1000), () {
+      _blinkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
         blinkOn = !blinkOn;
         _drawCursor();
       });
@@ -83,20 +83,20 @@ class Controller {
   DivElement _generateRow(int r) {
     Glyph prev, curr;
 
-    DivElement row = new DivElement();
-    String str = '';
+    var row = DivElement();
+    var str = '';
     prev = _model.getGlyphAt(r, 0);
-    for (int c = 0; c < _model.numCols; c++) {
+    for (var c = 0; c < _model.numCols; c++) {
       curr = _model.getGlyphAt(r, c);
 
       if (!curr.hasSameAttributes(prev) || c == _model.numCols - 1) {
         if (prev.hasDefaults()) {
-          row.append(new DocumentFragment.html(str));
+          row.append(DocumentFragment.html(str));
         } else {
-          SpanElement span = new SpanElement();
-          span.style.color = _theme.colors[prev.fgColor];
-          span.style.backgroundColor = _theme.colors[prev.bgColor];
-          span.append(new DocumentFragment.html(str));
+          var span = SpanElement();
+          span.style.color = _theme.colors[prev.fgColor] as String;
+          span.style.backgroundColor = _theme.colors[prev.bgColor] as String;
+          span.append(DocumentFragment.html(str));
           row.append(span);
         }
 
@@ -116,7 +116,7 @@ class Controller {
     div.innerHtml = '';
 
     DivElement row;
-    for (int r = 0; r < _model.numRows; r++) {
+    for (var r = 0; r < _model.numRows; r++) {
       row = _generateRow(r);
       row.classes.add('termrow');
 

@@ -1,9 +1,15 @@
-part of terminal.src.output.output;
+library escape_handler;
+
+import 'dart:convert';
+import 'dart:async';
+
+import '../model/display_attributes.dart';
+import '../model/model.dart';
 
 class EscapeHandler {
   // Taken from: http://www.termsys.demon.co.uk/vtansi.htm
   // And for VT102: http://www.ibiblio.org/pub/historic-linux/ftp-archives/tsx-11.mit.edu/Oct-07-1996/info/vt102.codes
-  static Map constantEscapes = {
+  static Map<String, String> constantEscapes = {
     // Device Status
     jsonEncode([27, 91, 99]): 'Query Device Code',
     jsonEncode([27, 91, 48, 99]): 'Query Device Code',
@@ -47,7 +53,7 @@ class EscapeHandler {
     jsonEncode([27, 91, 53, 105]): 'Start Print Log'
   };
 
-  static Map variableEscapeTerminators = {
+  static Map<int, String> variableEscapeTerminators = {
     // Device Status
     99: 'Report Device Code',
     82: 'Report Cursor Position',
@@ -81,7 +87,7 @@ class EscapeHandler {
       return true;
     }
 
-    String encodedEscape = jsonEncode(escape);
+    var encodedEscape = jsonEncode(escape);
     if (constantEscapes.containsKey(encodedEscape)) {
       _handleConstantEscape(
           encodedEscape, stdin, model, currAttributes, escape);
@@ -204,9 +210,9 @@ class EscapeHandler {
   }
 
   static void _scrollScreen(List<int> escape, Model model) {
-    int indexOfSemi = escape.indexOf(59);
-    int start = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
-    int end = int.parse(
+    var indexOfSemi = escape.indexOf(59);
+    var start = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
+    var end = int.parse(
             base64Encode(escape.sublist(indexOfSemi + 1, escape.length - 1))) -
         1;
     //print('Scrolling: $start to $end');
@@ -226,7 +232,7 @@ class EscapeHandler {
       row = 0;
       col = 0;
     } else {
-      int indexOfSemi = escape.indexOf(59);
+      var indexOfSemi = escape.indexOf(59);
       row = int.parse(base64Encode(escape.sublist(2, indexOfSemi))) - 1;
       col = int.parse(base64Encode(
               escape.sublist(indexOfSemi + 1, escape.length - 1))) -
@@ -275,7 +281,7 @@ class EscapeHandler {
   /// Sets multiple display attribute settings.
   /// Sets local [DisplayAttributes], given [escape].
   static void _setAttributeMode(List<int> escape, DisplayAttributes attr) {
-    String decodedEsc = base64Encode(escape);
+    var decodedEsc = base64Encode(escape);
 
     if (decodedEsc.contains('0m')) {
       attr.resetAll();

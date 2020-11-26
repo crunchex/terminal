@@ -1,8 +1,8 @@
-part of terminal.src.input.input;
+library input_keys;
 
 // Remapping of Dart keyCodes (whatever they really are)
 // to UTF8 integers of their Non-Shift equivalents.
-const Map<int, int> NOSHIFT_KEYS = const {
+const Map<int, int> NOSHIFT_KEYS = {
   65: 97, // A => a
   66: 98, // B => b
   67: 99, // C => c
@@ -62,7 +62,7 @@ const Map<int, int> NOSHIFT_KEYS = const {
 
 // Remapping of Dart keyCodes (whatever they really are)
 // to UTF8 integers of their Non-Shift equivalents.
-const SHIFT_KEYS = const {
+const SHIFT_KEYS = {
   48: 41, // 0 => )
   49: 33, // 1 => !
   50: 64, // 2 => @
@@ -86,21 +86,21 @@ const SHIFT_KEYS = const {
   222: 34 // "
 };
 
-Map<int, List> CURSOR_KEYS_NORMAL = {
+Map<int, List<int>> CURSOR_KEYS_NORMAL = {
   38: [27, 91, 65], // UP
   40: [27, 91, 66], // DOWN
   37: [27, 91, 68], // LEFT
   39: [27, 91, 67] // RIGHT
 };
 
-Map<int, List> CURSOR_KEYS_APP = {
+Map<int, List<int>> CURSOR_KEYS_APP = {
   38: [107], // UP
   40: [106], // DOWN
   37: [104], // LEFT
   39: [108] // RIGHT
 };
 
-const Map<int, String> NON_MODIFIABLE_KEYS = const {
+const Map<int, String> NON_MODIFIABLE_KEYS = {
   8: 'BACKSPACE',
   9: 'TAB',
   13: 'ENTER',

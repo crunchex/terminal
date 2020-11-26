@@ -1,22 +1,21 @@
-library terminal.src.input.input;
+library input;
 
 import 'dart:html';
 import 'dart:async';
 
 import '../model/model.dart';
-
-part 'input_keys.dart';
+import './input_keys.dart';
 
 class InputHandler {
   StreamController<List<int>> stdin;
 
   InputHandler() {
-    stdin = new StreamController<List<int>>();
+    stdin = StreamController<List<int>>();
   }
 
   /// Handles a given [KeyboardEvent].
   void handleInput(KeyboardEvent e, Model model, StreamController stdout) {
-    int key = e.keyCode;
+    var key = e.keyCode;
 
     // Don't let solo modifier keys through (Shift=16, Ctrl=17, Meta=91, Alt=18).
     if (key == 16 || key == 17 || key == 91 || key == 18) return;
@@ -41,7 +40,7 @@ class InputHandler {
 
     // Arrow keys.
     if (CURSOR_KEYS_NORMAL.containsKey(key)) {
-      bool normKeys = model.cursorkeys == CursorkeysMode.NORMAL;
+      var normKeys = model.cursorkeys == CursorkeysMode.NORMAL;
       stdin.add(normKeys ? CURSOR_KEYS_NORMAL[key] : CURSOR_KEYS_APP[key]);
       return;
     }
@@ -64,7 +63,7 @@ class InputHandler {
     if (e.ctrlKey) {
       print(key.toString());
       if (key == 118) {
-        document.execCommand('paste', null, "");
+        document.execCommand('paste', null, '');
         return;
       }
       if (key == 99) key = 3;
@@ -74,8 +73,9 @@ class InputHandler {
     stdin.add([key]);
   }
 
-  Future<bool> _listenForBell(StreamController stdout) {
-    return stdout.stream.first.then((e) => e.contains(7));
+  Future<bool> _listenForBell(StreamController stdout) async {
+    var e = await stdout.stream.first as List<int>;
+    return e.contains(7);
   }
 
   void _handleDeleteKey(StreamController stdout) {

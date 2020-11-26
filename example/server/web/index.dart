@@ -10,17 +10,17 @@ ButtonElement invert;
 Terminal term;
 
 void main() {
-  status = querySelector('#status');
-  invert = querySelector('#invert');
+  status = querySelector('#status') as SpanElement;
+  invert = querySelector('#invert') as ButtonElement;
 
-  term = new Terminal(querySelector('#console'))
+  term = Terminal(querySelector('#console') as DivElement)
     ..scrollSpeed = 3
     ..cursorBlink = true
-    ..theme = new Theme.SolarizedDark();
+    ..theme = Theme.SolarizedDark();
 
-  List<int> size = term.currentSize();
-  int rows = size[0];
-  int cols = size[1];
+  var size = term.currentSize();
+  var rows = size[0];
+  var cols = size[1];
   print('Terminal spawned with size: $rows x $cols');
   print('└─> cmdr-pty size should be set to $rows x ${cols - 1}');
 
@@ -28,7 +28,7 @@ void main() {
 
   // Terminal input.
   term.stdin.stream.listen((data) {
-    ws.sendByteBuffer(new Uint8List.fromList(data).buffer);
+    ws.sendByteBuffer(Uint8List.fromList(data).buffer);
   });
 
   restartWebsocket();
@@ -48,21 +48,21 @@ void updateStatusDisconnect() {
 
 void restartWebsocket() {
   if (ws != null && ws.readyState == WebSocket.OPEN) ws.close();
-  String url = window.location.host.split(':')[0];
+  var url = window.location.host.split(':')[0];
   initWebSocket('ws://$url:8080/pty');
 }
 
 void initWebSocket(String url, [int retrySeconds = 2]) {
-  bool encounteredError = false;
+  var encounteredError = false;
 
-  ws = new WebSocket(url);
-  ws.binaryType = "arraybuffer";
+  ws = WebSocket(url);
+  ws.binaryType = 'arraybuffer';
 
   ws.onOpen.listen((e) => updateStatusConnect());
 
   // Terminal output.
   ws.onMessage.listen((e) {
-    ByteBuffer buf = e.data;
+    var buf = e.data as ByteBuffer;
     term.stdout.add(buf.asUint8List());
   });
 
@@ -71,8 +71,7 @@ void initWebSocket(String url, [int retrySeconds = 2]) {
   ws.onError.listen((e) {
     print('Terminal disconnected due to ERROR. Retrying...');
     if (!encounteredError) {
-      new Timer(
-          new Duration(seconds: retrySeconds), () => initWebSocket(url, 4));
+      Timer(Duration(seconds: retrySeconds), () => initWebSocket(url, 4));
     }
     encounteredError = true;
   });
@@ -80,8 +79,8 @@ void initWebSocket(String url, [int retrySeconds = 2]) {
 
 void invertTheme() {
   if (term.theme.name == 'solarized-dark') {
-    term.theme = new Theme.SolarizedLight();
+    term.theme = Theme.SolarizedLight();
   } else {
-    term.theme = new Theme.SolarizedDark();
+    term.theme = Theme.SolarizedDark();
   }
 }

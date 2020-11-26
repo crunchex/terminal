@@ -11,19 +11,19 @@ Terminal term;
 
 void main() {
   print('Terminal started');
-  address = querySelector('#address');
-  connect = querySelector('#connect');
-  invert = querySelector('#invert');
-  status = querySelector('#status');
+  address = querySelector('#address') as InputElement;
+  connect = querySelector('#connect') as ButtonElement;
+  invert = querySelector('#invert') as ButtonElement;
+  status = querySelector('#status') as SpanElement;
 
-  term = new Terminal(querySelector('#console'))
+  term = Terminal(querySelector('#console') as DivElement)
     ..scrollSpeed = 3
     ..cursorBlink = true
-    ..theme = new Theme.SolarizedDark();
+    ..theme = Theme.SolarizedDark();
 
-  List<int> size = term.currentSize();
-  int rows = size[0];
-  int cols = size[1];
+  var size = term.currentSize();
+  var rows = size[0];
+  var cols = size[1];
   print('Terminal spawned with size: $rows x $cols');
   print('└─> cmdr-pty size should be set to $rows x ${cols - 1}');
 
@@ -36,7 +36,7 @@ void main() {
 
   // Terminal input.
   term.stdin.stream.listen((data) {
-    ws.sendByteBuffer(new Uint8List.fromList(data).buffer);
+    ws.sendByteBuffer(Uint8List.fromList(data).buffer);
   });
 }
 
@@ -62,14 +62,14 @@ void restartWebsocket() {
 }
 
 void initWebSocket(String url, [int retrySeconds = 2]) {
-  ws = new WebSocket(url);
-  ws.binaryType = "arraybuffer";
+  ws = WebSocket(url);
+  ws.binaryType = 'arraybuffer';
 
   ws.onOpen.listen((e) => updateStatusConnect());
 
   // Terminal output.
   ws.onMessage.listen((e) {
-    ByteBuffer buf = e.data;
+    var buf = e.data as ByteBuffer;
     term.stdout.add(buf.asUint8List());
   });
 
@@ -79,8 +79,8 @@ void initWebSocket(String url, [int retrySeconds = 2]) {
 
 void invertTheme() {
   if (term.theme.name == 'solarized-dark') {
-    term.theme = new Theme.SolarizedLight();
+    term.theme = Theme.SolarizedLight();
   } else {
-    term.theme = new Theme.SolarizedDark();
+    term.theme = Theme.SolarizedDark();
   }
 }

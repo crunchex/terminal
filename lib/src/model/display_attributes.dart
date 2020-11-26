@@ -1,4 +1,6 @@
-part of terminal.src.model.model;
+library display_attributes;
+
+import 'dart:convert';
 
 /// Holds the current state of [Terminal] display attributes.
 class DisplayAttributes {
@@ -6,17 +8,18 @@ class DisplayAttributes {
   String fgColor, bgColor;
 
   DisplayAttributes(
-      {this.bright: false,
-      this.dim: false,
-      this.underscore: false,
-      this.blink: false,
-      this.reverse: false,
-      this.hidden: false,
-      this.fgColor: 'white',
-      this.bgColor: 'black'});
+      {this.bright = false,
+      this.dim = false,
+      this.underscore = false,
+      this.blink = false,
+      this.reverse = false,
+      this.hidden = false,
+      this.fgColor = 'white',
+      this.bgColor = 'black'});
 
+  @override
   String toString() {
-    Map properties = {
+    var properties = {
       'bright': bright,
       'dim': dim,
       'underscore': underscore,
