@@ -1,9 +1,9 @@
-library terminal.src.controller;
+library controller;
 
 import 'dart:async';
 import 'dart:html';
 
-import 'theme.dart';
+import '../theme.dart';
 import 'model/model.dart';
 import 'model/glyph.dart';
 
