@@ -11,22 +11,19 @@ Socket socket;
 WebSocket websocket;
 
 /// Initializes and HTTP server to serve the gui and handle [WebSocket] requests.
-void initServer() {
+void initServer() async {
   // Set up an HTTP webserver and listen for standard page requests or upgraded
   // [WebSocket] requests.
-  HttpServer.bind(InternetAddress.anyIPv4, 8080).then((HttpServer server) {
-    print("HttpServer listening on port:${server.port}...");
-    server
-        .asBroadcastStream()
-        .listen((HttpRequest request) => routeRequest(request))
-        .asFuture() // Automatically cancels on error.
-        .catchError((_) => print("caught error"));
-  });
+  var server = await HttpServer.bind(InternetAddress.anyIPv4, 8080);
+  print('HttpServer listening on port:${server.port}...');
+  await for (HttpRequest request in server) {
+    routeRequest(request);
+  }
 }
 
 /// Routes a request between standard requests and upgraded (websocket) requests.
 void routeRequest(HttpRequest request) {
-  // WebSocket requests are considered "upgraded" HTTP requests.
+  // WebSocket requests are considered 'upgraded' HTTP requests.
   if (!WebSocketTransformer.isUpgradeRequest(request)) {
     handleStandardRequest(request);
     return;
@@ -41,9 +38,9 @@ void routeRequest(HttpRequest request) {
 
 /// Returns a [VirtualDirectory] set up with a path to the web directory.
 VirtualDirectory getVirDir() {
-  String guiPath = path.join(path.dirname(Platform.script.toFilePath()), 'web');
+  var guiPath = path.join(path.dirname(Platform.script.toFilePath()), 'web');
 
-  VirtualDirectory virDir = VirtualDirectory(guiPath)
+  var virDir = VirtualDirectory(guiPath)
     ..allowDirectoryListing = true
     ..followLinks = true
     ..jailRoot = false;
@@ -61,7 +58,7 @@ VirtualDirectory getVirDir() {
 void handleStandardRequest(HttpRequest request) {
   print('${request.method} request for: ${request.uri.path}');
 
-  VirtualDirectory virDir = getVirDir();
+  var virDir = getVirDir();
   if (virDir != null) {
     virDir.serveRequest(request);
   } else {
@@ -83,7 +80,7 @@ void startPty() {
     pty.stdout.transform(utf8.decoder).listen((data) {
       if (data.contains('listening on port: ')) {
         // Get the port returned by cmdr-pty.
-        String port = data.replaceFirst('listening on port: ', '');
+        var port = data.replaceFirst('listening on port: ', '');
 
         // Connect and start handling IO.
         Socket.connect('127.0.0.1', int.parse(port)).then((s) => handleIO(s));
@@ -91,7 +88,7 @@ void startPty() {
 
       print('[cmdr-pty stdout]: $data');
     });
-  }).catchError((error) {
+  }).catchError((Error error) {
     if (error is! ProcessException) throw error;
     print('cmdr-pty: run failed. check installation and/or path.');
     return;
@@ -106,8 +103,11 @@ void handleIO(Socket s) {
 
   // Output from cmdr-pty -> the client connected via websocket.
   socket.listen((data) => websocket.add((data)));
+
   // Input from the client connected via websocket -> cmdr-pty.
-  websocket.listen((data) => socket.add(data)).onDone(() => cleanUp());
+  websocket
+      .listen((dynamic data) => socket.add(data as List<int>))
+      .onDone(() => cleanUp());
 }
 
 /// Cleans up all the sockets and processes started by this program.

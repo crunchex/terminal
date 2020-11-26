@@ -28,7 +28,7 @@ class OutputHandler {
     //print('incoming output: ' + output.toString());
 
     // Insert the incompleteEscape from last processing if exists.
-    List<int> outputToProcess = List.from(_incompleteEscape);
+    var outputToProcess = List<int>.from(_incompleteEscape);
     _incompleteEscape = [];
     outputToProcess.addAll(output);
 
@@ -50,16 +50,16 @@ class OutputHandler {
   /// Parses out escape sequences. When it finds one,
   /// it handles it and returns the remainder of [output].
   List<int> _parseEscape(List<int> output, Controller controller,
-      StreamController stdin, Model model, DisplayAttributes currAttributes) {
+      StreamController<dynamic> stdin, Model model, DisplayAttributes currAttributes) {
     List<int> escape;
     int termIndex;
 
-    for (int i = 1; i <= output.length; i++) {
+    for (var i = 1; i <= output.length; i++) {
       termIndex = i;
       escape = output.sublist(0, i);
 
-      bool escapeHandled =
-          EscapeHandler.handleEscape(escape, stdin, model, currAttributes);
+      var escapeHandled =
+          EscapeHandler.handleEscape(escape, stdin as StreamController<List<int>>, model, currAttributes);
       if (escapeHandled) {
         controller.refreshDisplay();
         return output.sublist(termIndex);
@@ -75,7 +75,7 @@ class OutputHandler {
   void _handleOutString(List<int> codes, Model model, Controller controller,
       DisplayAttributes currAttributes) {
     for (var code in codes) {
-      String char = String.fromCharCode(code);
+      var char = String.fromCharCode(code);
 
       if (code == 8) {
         model.backspace();
@@ -116,7 +116,7 @@ class OutputHandler {
         model.cursorCarriageReturn();
         model.cursorNewLine();
       } else {
-        Glyph g = Glyph(char, currAttributes);
+        var g = Glyph(char, currAttributes);
         model.setGlyphAt(g, model.cursor.row, model.cursor.col);
         model.cursorForward();
       }

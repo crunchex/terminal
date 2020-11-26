@@ -7,6 +7,7 @@ class Cursor {
   int row = 0;
   int col = 0;
 
+  @override
   String toString() {
     return 'row: $row, col: $col';
   }
@@ -27,11 +28,11 @@ class Model {
   CursorkeysMode cursorkeys;
 
   // Implemented as stacks in scrolling.
-  List<List> _reverseBuffer;
-  List<List> _forwardBuffer;
+  List<List<Glyph>> _reverseBuffer;
+  List<List<Glyph>> _forwardBuffer;
 
   // Implemented as a queue in scrolling.
-  List<List> _frame;
+  List<List<Glyph>> _frame;
 
   // Tab locations.
   List<List> _tabs;
@@ -59,9 +60,9 @@ class Model {
     // Puts all old content into the reverse buffer and starts clean.
     _reverseBuffer = oldModel._reverseBuffer;
     // Don't add blank lines.
-    for (List<Glyph> row in oldModel._frame) {
-      bool blank = true;
-      for (Glyph g in row) {
+    for (var row in oldModel._frame) {
+      var blank = true;
+      for (var g in row) {
         if (g.value != Glyph.SPACE && g.value != Glyph.CURSOR) {
           blank = false;
           break;
@@ -170,8 +171,8 @@ class Model {
   void cursorNewLine() {
     //print('cursorNewLine');
     if (_forwardBuffer.isNotEmpty) {
-      _forwardBuffer.insert(0, List<Glyph>());
-      for (int c = 0; c < numCols; c++) {
+      _forwardBuffer.insert(0, <Glyph>[]);
+      for (var c = 0; c < numCols; c++) {
         _forwardBuffer.first.add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
       return;
@@ -185,7 +186,7 @@ class Model {
   }
 
   void setTab() {
-    _tabs.add([cursor.row, cursor.col]);
+    _tabs.add(<int>[cursor.row, cursor.col]);
   }
 
   void clearAllTabs() {
@@ -195,23 +196,23 @@ class Model {
   /// Erases from the current cursor position to the end of the current line.
   void eraseEndOfLine() {
     //cursorBackward();
-    for (int i = cursor.col; i < _frame[cursor.row].length; i++) {
+    for (var i = cursor.col; i < _frame[cursor.row].length; i++) {
       setGlyphAt(Glyph(Glyph.SPACE, DisplayAttributes()), cursor.row, i);
     }
   }
 
   void eraseDown() {
-    int cursorRow = cursor.row;
-    for (List<Glyph> r in _frame.sublist(cursorRow)) {
-      for (int c = 0; c < r.length; c++) {
+    var cursorRow = cursor.row;
+    for (var r in _frame.sublist(cursorRow)) {
+      for (var c = 0; c < r.length; c++) {
         r[c].value = Glyph.SPACE;
       }
     }
   }
 
   void eraseScreen() {
-    for (List<Glyph> r in _frame) {
-      for (int c = 0; c < r.length; c++) {
+    for (var r in _frame) {
+      for (var c = 0; c < r.length; c++) {
         r[c].value = Glyph.SPACE;
       }
     }
@@ -227,7 +228,7 @@ class Model {
   /// Manipulates the frame & scroll bubber to handle scrolling down in normal,
   /// non-application mode.
   void scrollUp(int numLines) {
-    for (int i = 0; i < numLines; i++) {
+    for (var i = 0; i < numLines; i++) {
       if (_reverseBuffer.isEmpty) return;
 
       _frame.insert(0, _reverseBuffer.last);
@@ -240,7 +241,7 @@ class Model {
   /// Manipulates the frame & scroll bubber to handle scrolling down in normal,
   /// non-application mode.
   void scrollDown(int numLines) {
-    for (int i = 0; i < numLines; i++) {
+    for (var i = 0; i < numLines; i++) {
       if (_forwardBuffer.isEmpty) return;
 
       _frame.add(_forwardBuffer.last);
@@ -264,8 +265,8 @@ class Model {
     if (_reverseBuffer.length > _MAXBUFFER) _reverseBuffer.removeAt(0);
     _frame.removeAt(0);
 
-    List<Glyph> newRow = [];
-    for (int c = 0; c < numCols; c++) {
+    var newRow = <Glyph>[];
+    for (var c = 0; c < numCols; c++) {
       newRow.add(Glyph(Glyph.SPACE, DisplayAttributes()));
     }
     _frame.add(newRow);
@@ -279,10 +280,10 @@ class Model {
   /// Manipulates the frame to handle scrolling
   /// upward of a single line in application mode.
   void _scrollUp(int numLines) {
-    for (int i = 0; i < numLines; i++) {
+    for (var i = 0; i < numLines; i++) {
       _frame.removeAt(numRows - 2);
-      _frame.insert(0, List<Glyph>());
-      for (int c = 0; c < numCols; c++) {
+      _frame.insert(0, <Glyph>[]);
+      for (var c = 0; c < numCols; c++) {
         _frame[0].add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
     }
@@ -291,10 +292,10 @@ class Model {
   /// Manipulates the frame to handle scrolling
   /// downward of a single line in application mode.
   void _scrollDown(int numLines) {
-    for (int i = 0; i < numLines; i++) {
+    for (var i = 0; i < numLines; i++) {
       _frame.removeAt(0);
-      _frame.insert(numRows - 2, List<Glyph>());
-      for (int c = 0; c < numCols; c++) {
+      _frame.insert(numRows - 2, <Glyph>[]);
+      for (var c = 0; c < numCols; c++) {
         _frame[numRows - 2].add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
     }
@@ -303,9 +304,9 @@ class Model {
   /// Initializes the internal model with a List of Lists.
   /// Each location defaults to a Glyph.SPACE.
   void _initModel() {
-    for (int r = 0; r < numRows; r++) {
-      _frame.add(List<Glyph>());
-      for (int c = 0; c < numCols; c++) {
+    for (var r = 0; r < numRows; r++) {
+      _frame.add(<Glyph>[]);
+      for (var c = 0; c < numCols; c++) {
         _frame[r].add(Glyph(Glyph.SPACE, DisplayAttributes()));
       }
     }

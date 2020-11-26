@@ -33,13 +33,13 @@ class Terminal {
   bool get cursorBlink => _controller.cursorBlink;
 
   /// Enable/disable cursor blink. Default: true
-  void set cursorBlink(bool b) => _controller.setCursorBlink(b);
+  set cursorBlink(bool b) => _controller.setCursorBlink(b);
 
   /// Returns current [Theme].
   Theme get theme => _controller.theme;
 
   /// Sets a [Terminal]'s [Theme]. Default: Solarized-Dark.
-  void set theme(Theme thm) {
+  set theme(Theme thm) {
     _theme = thm;
     _controller.setTheme(thm);
   }
@@ -64,7 +64,7 @@ class Terminal {
     _currAttributes = DisplayAttributes();
     _theme = Theme.SolarizedDark();
 
-    List<int> size = calculateSize();
+    var size = calculateSize();
     _model = Model(size[0], size[1]);
     _controller = Controller(_terminal, _cursor, _model, _theme);
 
@@ -93,8 +93,8 @@ class Terminal {
     // The +1 on width is needed because bash throws an extra space
     // ahead of a linewrap for some reason. So if bash cols = 80,
     // then terminal cols = 81.
-    int rows = _terminal.contentEdge.height ~/ _theme.charHeight;
-    int cols = _terminal.contentEdge.width ~/ _theme.charWidth + 1;
+    var rows = _terminal.contentEdge.height ~/ _theme.charHeight;
+    var cols = _terminal.contentEdge.width ~/ _theme.charWidth + 1;
 
     // Set a default if the calculated size is unusable.
     if (rows < 10 || cols < 10) {
@@ -107,7 +107,7 @@ class Terminal {
 
   DivElement _createTerminalOutputDiv() {
     // contenteditable is important for clipboard paste functionality.
-    DivElement termOutput = DivElement()
+    var termOutput = DivElement()
       ..tabIndex = 0
       ..classes.add('terminal-output')
       ..spellcheck = false;
@@ -121,7 +121,7 @@ class Terminal {
   }
 
   DivElement _createTerminalCursorDiv() {
-    DivElement termCursor = DivElement()
+    var termCursor = DivElement()
       ..classes.add('terminal-cursor')
       ..text = Glyph.CURSOR;
 
@@ -159,7 +159,7 @@ class Terminal {
     });
 
     _terminal.onPaste.listen((e) {
-      String pasteString = e.clipboardData.getData('text');
+      var pasteString = e.clipboardData.getData('text');
       for (int i in pasteString.runes) {
         stdin.add([i]);
       }

@@ -21,7 +21,7 @@ class Controller {
   Theme get theme => _theme;
 
   /// Sets a [Terminal]'s [Theme]. Default: Solarized-Dark.
-  void set theme(Theme thm) => setTheme(thm);
+  set theme(Theme thm) => setTheme(thm);
 
   Controller(this.div, this.cursor, Model model, Theme theme) {
     _model = model;
@@ -83,19 +83,19 @@ class Controller {
   DivElement _generateRow(int r) {
     Glyph prev, curr;
 
-    DivElement row = DivElement();
-    String str = '';
+    var row = DivElement();
+    var str = '';
     prev = _model.getGlyphAt(r, 0);
-    for (int c = 0; c < _model.numCols; c++) {
+    for (var c = 0; c < _model.numCols; c++) {
       curr = _model.getGlyphAt(r, c);
 
       if (!curr.hasSameAttributes(prev) || c == _model.numCols - 1) {
         if (prev.hasDefaults()) {
           row.append(DocumentFragment.html(str));
         } else {
-          SpanElement span = SpanElement();
-          span.style.color = _theme.colors[prev.fgColor];
-          span.style.backgroundColor = _theme.colors[prev.bgColor];
+          var span = SpanElement();
+          span.style.color = _theme.colors[prev.fgColor] as String;
+          span.style.backgroundColor = _theme.colors[prev.bgColor] as String;
           span.append(DocumentFragment.html(str));
           row.append(span);
         }
@@ -116,7 +116,7 @@ class Controller {
     div.innerHtml = '';
 
     DivElement row;
-    for (int r = 0; r < _model.numRows; r++) {
+    for (var r = 0; r < _model.numRows; r++) {
       row = _generateRow(r);
       row.classes.add('termrow');
 

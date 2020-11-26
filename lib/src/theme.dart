@@ -4,7 +4,7 @@ library terminal.src.theme;
 /// for [Terminal];
 class Theme {
   String name;
-  Map colors;
+  Map<String, String> colors;
   String foregroundColor, backgroundColor;
 
   // Manually calculated via trial-and-error.

@@ -17,8 +17,9 @@ class DisplayAttributes {
       this.fgColor = 'white',
       this.bgColor = 'black'});
 
+  @override
   String toString() {
-    Map properties = {
+    var properties = {
       'bright': bright,
       'dim': dim,
       'underscore': underscore,

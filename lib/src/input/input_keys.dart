@@ -86,14 +86,14 @@ const SHIFT_KEYS = {
   222: 34 // "
 };
 
-Map<int, List> CURSOR_KEYS_NORMAL = {
+Map<int, List<int>> CURSOR_KEYS_NORMAL = {
   38: [27, 91, 65], // UP
   40: [27, 91, 66], // DOWN
   37: [27, 91, 68], // LEFT
   39: [27, 91, 67] // RIGHT
 };
 
-Map<int, List> CURSOR_KEYS_APP = {
+Map<int, List<int>> CURSOR_KEYS_APP = {
   38: [107], // UP
   40: [106], // DOWN
   37: [104], // LEFT
